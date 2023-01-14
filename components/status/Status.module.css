@@ -1,0 +1,15 @@
+.statusSuccess{
+    width: 100%;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.8rem;
+    background-color: rgb(18, 184, 45);
+    border-radius: 5px;
+}
+
+.statusErr{
+    width: 100%;
+    padding: 0.7rem 0.5rem;
+    font-size: 0.8rem;
+    background-color: rgb(214, 42, 42);
+    border-radius: 5px;
+}

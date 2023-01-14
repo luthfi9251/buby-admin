@@ -1,0 +1,39 @@
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(44, 44, 44, 0.678);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.close{
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-weight: 800;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.modalBody{
+    width: 50%;
+    position: relative;
+    background-color: #2a2d3d;
+}
+
+@media only screen and (max-width: 768px) {
+    .modalBody{
+        width: 90%;
+    }
+}

@@ -1,0 +1,32 @@
+.table{
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.tableContainer{
+    width: 100%;
+}
+
+.thead{
+    background-color: #2a2d3d;
+}
+.tbody{
+
+}
+
+.tableContainer, .thead tr th, .tbody tr td {
+    border: 1px solid rgb(255, 255, 255);
+    border-collapse: collapse;
+  }
+
+.tbody tr:nth-child(even) {
+    background-color: #5d658b;
+}
+
+.thead tr th, .tbody tr td{
+    text-align: center;
+    padding: .3rem 0.3rem;
+}
+  

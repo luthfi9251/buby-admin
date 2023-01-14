@@ -1,0 +1,17 @@
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 15px;
+}
+
+@media only screen and (max-width: 768px){
+    .form{
+        grid-template-columns: 1fr;
+    }
+}

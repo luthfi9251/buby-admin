@@ -1,0 +1,74 @@
+.container{
+    width: 100%;
+    /* min-height: 100vh; */
+    background-color: #404258;
+    display: grid;
+    grid-template-columns: 25% 1fr 1fr;
+    grid-template-rows: 150px 1fr 1fr auto;
+    gap: 15px;
+    grid-template-areas: 
+        "sidebar title title"
+        "sidebar notification form"
+        "sidebar keuangan form"
+        "sidebar product product";
+    padding:0 10px 0 0 ;
+}
+
+.title{
+    grid-area: title;
+    font-weight: 600;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.navigation{
+    display: none;
+    grid-area: nav;
+}
+
+.notification{
+    grid-area: notification;
+    background-color: #50577A;
+}
+
+.form{
+    grid-area: form;
+    background-color: #50577A;
+}
+
+.keuangan{
+    grid-area: keuangan;
+    background-color: #50577A;
+}
+
+.sidebar{
+    width: 100%;
+    grid-area: sidebar;
+    background-color: aqua;
+}
+
+.product{
+    grid-area: product;
+}
+
+@media only screen and (max-width: 768px) {
+    .container{
+        grid-template-columns: 100%;
+        grid-template-rows: 100px auto auto auto auto;
+        padding: 0 10px;
+        grid-template-areas: 
+        "title"
+        "notification"
+        "nav"
+        "product"
+        "form"
+        "keuangan";
+    }
+    .navigation{
+        grid-area: nav;
+        display: block;
+    }
+}

@@ -1,0 +1,39 @@
+.container{
+    width: 100vw;
+    height: 100vh;
+    background-color: #404258;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper{
+    width: 40%;
+    min-width: 350px;
+    padding: 1rem;
+    background-color: #50577A;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    border-radius: 15px;
+}
+
+.welcome{
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.check{
+    display: flex;
+    gap: 10px;
+}
+
+.label{
+    font-size: 0.8rem;
+}
