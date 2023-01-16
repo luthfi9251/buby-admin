@@ -8,10 +8,13 @@ import Table from "../table/Table"
 export default function ShowProduct(){
     let [namaProd, setNamaProd] = useState("")
     let [tipeProd, setTipeProd] = useState("")
-    let [durasiProd, setDurasiProd] = useState("")
+    let [billing, setBilling] = useState("")
+    let [durasiProd, setDurasiProd] = useState()
+    let [jumlahUser, setJumlahUser] = useState()
     let [filteredData, setFilteredData] = useState([])
+    let [tempData, setTempData] = useState([])
     let [isEmpty, setIsEmpty] = useState(true)
-    let [ dataTable, setDataTable ] =  useState({ head: [], value:[[]] })
+    let [dataTable, setDataTable] =  useState({ head: [], value:[[]] })
     let [isLoading, setIsLoading] = useState(false)
     let [namaInitial, setNamaInitial] = useState([])
 
@@ -34,6 +37,8 @@ export default function ShowProduct(){
             .catch(err=>alert(err))
     },[])
 
+    
+
     let selectFriendly = (data) =>{
         return data.map((item)=>{
             return {
@@ -52,17 +57,29 @@ export default function ShowProduct(){
                 setTipeProd(val)
                 break
             case "durasi":
-                setDurasiProd(val)
+                setDurasiProd(parseInt(val))
+                break
+            case "jumlah_user":
+                setJumlahUser(parseInt(val))
+                break
+            case "billing":
+                setBilling(val)
                 break
             default:
                 console.log("unknown value")
         }
     }
 
-    let getUniqueData = (data, key, compare) => {
+    let getUniqueData = (data, key, compare =[]) => {
         let temp = ["ALL"]
         data = data.filter(item=>{
-            return Object.values(item).includes(compare)
+            let bool = true
+            compare.forEach(a=>{
+                if(!Object.values(item).includes(a)){
+                    bool=false
+                }
+            })
+            return bool
         })
         data.forEach(item=>{
             if(!temp.includes(item[key])){
@@ -77,6 +94,8 @@ export default function ShowProduct(){
             namaProduk: e.target[0].value,
             tipeProduk: e.target[1].value === "DEFAULT" ? "ALL" : e.target[1].value,
             durasi: e.target[2].value === "DEFAULT" ? "ALL" : e.target[2].value,
+            uac: e.target[3].value === "DEFAULT" ? "ALL" : e.target[3].value,
+            billing: e.target[4].value === "DEFAULT" ? "ALL" : e.target[4].value
         }
         setIsLoading(true)
         e.preventDefault()
@@ -112,10 +131,14 @@ export default function ShowProduct(){
     return(
         <>
             <Layout title="Cari Produk">
-                <form action="" className={style.form} onSubmit={handleSubmit}>
-                    <InputItem label="Nama Produk" name="nama_produk" callback={getValue} type="select" data={selectFriendly(namaInitial)}/>
-                    <InputItem label="Tipe Produk" name="tipe_produk" data={getUniqueData(filteredData,"tipe_produk",namaProd)} callback={getValue} type="select"/>
-                    <InputItem label="Durasi (hari)" name="durasi" data={getUniqueData(filteredData,"durasi",tipeProd)} callback={getValue} type="select"/>
+                <form action=""  onSubmit={handleSubmit}>
+                    <div className={style.form}>
+                        <InputItem label="Nama Produk" name="nama_produk" callback={getValue} type="select" data={selectFriendly(namaInitial)}/>
+                        <InputItem label="Tipe Produk" name="tipe_produk" data={getUniqueData(filteredData,"tipe_produk",[namaProd])} callback={getValue} type="select"/>
+                        <InputItem label="Durasi (hari)" name="durasi" data={getUniqueData(filteredData,"durasi",[tipeProd, namaProd])} callback={getValue} type="select"/>
+                        <InputItem label="Jumlah User" name="jumlah_user" data={getUniqueData(filteredData,"user_per_account",[durasiProd, tipeProd])} callback={getValue} type="select"/>
+                        <InputItem label="Billing" name="billing" data={getUniqueData(filteredData,"billing",[durasiProd, tipeProd,jumlahUser])} callback={getValue} type="select"/>
+                    </div>
                     <InputItem label="Cari" type="submit" loading={isLoading}/>
                 </form>
                 <Table data={dataTable} canEdit={false}/>

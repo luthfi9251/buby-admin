@@ -7,30 +7,27 @@ export default async function handler(req, res) {
   switch(req.method){
     case "POST":
       try{
-        const { namaProduk,tipeProduk,durasi } = req.body
-        
-        let result
-        if(tipeProduk === "ALL" && durasi === "ALL"){
-            result = await mysqlQuery({
-                query: "select * from view_produk where nama_produk = ?",
-                values: [namaProduk]
-            })
-        }else if(tipeProduk === "ALL"){
-            result = await mysqlQuery({
-                query: "select * from view_produk where nama_produk = ? and durasi = ?",
-                values: [namaProduk,durasi]
-            })
-        }else if(durasi === "ALL"){
-            result = await mysqlQuery({
-                query: "select * from view_produk where nama_produk = ? and tipe_produk = ?",
-                values: [namaProduk,tipeProduk]
-            })
-        }else{
-            result = await mysqlQuery({
-                query: "select * from view_produk where nama_produk = ? and tipe_produk = ? and durasi = ?",
-                values: [namaProduk,tipeProduk,durasi]
-            })
+        const { namaProduk,tipeProduk,durasi,uac,billing } = req.body
+
+        let queryMysql = `select * from view_produk where nama_produk = '${namaProduk}'`
+
+        if(!(tipeProduk === "ALL")){
+          queryMysql += ` and tipe_produk='${tipeProduk}'`
         }
+        if(!(durasi === "ALL")){
+          queryMysql += ` and durasi='${durasi}'`
+        }
+        if(!(uac === "ALL")){
+          queryMysql += ` and user='${uac}'`
+        }
+        if(!(billing === "ALL")){
+          queryMysql += ` and billing='${billing}'`
+        }
+        
+        
+        let result = await mysqlQuery({
+          query: queryMysql
+        })
 
         res.status(200).json({
             success : "true",

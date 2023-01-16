@@ -49,7 +49,7 @@ export default async function handler(req, res) {
 
 
         const result = await mysqlQuery({
-            query: "select nama_produk, tipe_produk,user_per_account, durasi from jenis_produk where nama_produk=?",
+            query: "select nama_produk, tipe_produk,user_per_account, durasi,billing from jenis_produk where nama_produk=?",
             values: [nama]
         })
         res.status(200).json({

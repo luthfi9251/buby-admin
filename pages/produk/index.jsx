@@ -23,6 +23,12 @@ export default function Produk({ data }){
     let [filterJenisProduk, setFilterJenisProduk] = useState(dataTable)
     let [isLoading1, setIsLoading1] = useState(false)
     let [isLoading2, setIsLoading2] = useState(false)
+
+    let [namaProd, setNamaProd] = useState("ALL")
+    let [tipeProd, setTipeProd] = useState("ALL")
+    let [billing, setBilling] = useState("ALL")
+    let [durasiProd, setDurasiProd] = useState("ALL")
+    let [jumlahUser, setJumlahUser] = useState("ALL")
     
     let formRef = useRef()
 
@@ -34,15 +40,36 @@ export default function Produk({ data }){
         setIdVal("")
         setValProduk([])
         setIdProduk(filtered.map(item=>{
+            let text = `${item[2]} ${item[3]}U ${item[4]} ${item[5]}`.toUpperCase()
             return {
                 value : item[0],
-                text : item[0]
+                text : text
             }
         }))
     },[filterVal])
 
+    useEffect(()=>{
+        let temp = dataTable
+        // let rule = [namaProd,tipeProd,billing,durasiProd,jumlahUser]
+        let rule = {namaProd,tipeProd,billing,durasiProd : isNaN(durasiProd)?"ALL":durasiProd,jumlahUser : isNaN(jumlahUser)?"ALL":jumlahUser}
+        rule = Object.values(rule)
+        rule = rule.filter(item => item != "ALL")
+        let val = temp.value.filter(item=>{
+            let bool = true
+            rule.forEach(a=>{
+                if(!item.includes(a)){
+                    bool=false
+                }
+            })
+            return bool
+        })
+        setFilterJenisProduk({
+            head : dataTable.head,
+            value : val
+        })
+    },[namaProd,tipeProd,billing,durasiProd,jumlahUser])
+
     useEffect(()=>{    //buat ganti val produk
-        console.log("idVal", idVal)
         let arr = data.value
         if(idVal !== ""){
             let filtered = arr.filter(item=>{
@@ -155,6 +182,35 @@ export default function Produk({ data }){
         })
     }
 
+    let selectFriendly = (data) =>{
+        return data.map((item)=>{
+            return {
+                value : item,
+                text : item
+            }
+        })
+    }
+
+    let getUniqueData = (data, key, compare =[]) => {
+        let temp = []
+        data = data.value
+        data = data.filter(item=>{
+            let bool = true
+            compare.forEach(a=>{
+                if(!item.includes(a)){
+                    bool=false
+                }
+            })
+            return bool
+        })
+        data.forEach(item=>{
+            if(!temp.includes(item[key])){
+                temp.push(item[key])
+            }
+        })
+        return selectFriendly(temp)
+    }
+
     let getFilteredData = (index,data)=>{
         let arr = data.value
         if(index === 1){
@@ -170,6 +226,28 @@ export default function Produk({ data }){
                     text : item
                 }
             })
+        }
+    }
+
+    let getValueSearch = (val,name) =>{
+        switch(name){
+            case "nama_produk":
+                setNamaProd(val)
+                break
+            case "tipe_produk":
+                setTipeProd(val)
+                break
+            case "durasi":
+                setDurasiProd(parseInt(val))
+                break
+            case "jumlah_user":
+                setJumlahUser(parseInt(val))
+                break
+            case "billing":
+                setBilling(val)
+                break
+            default:
+                console.log("unknown value")
         }
     }
 
@@ -191,7 +269,11 @@ export default function Produk({ data }){
                 </form>
             </Layout>
             <Layout title="Data jenis Produk" dropable={true} defaultOpen={false}>
-                <InputItem type="select" callback={handleSearchChange} data={getFilteredData(1, dataTable)} selectDefault={{text:"ALL", value:"ALL"}}/>
+                <InputItem type="select" callback={getValueSearch} data={getFilteredData(1, dataTable)} label="Nama Produk" name="nama_produk" selectDefault={{text:"ALL", value:"ALL"}}/>
+                <InputItem label="Tipe Produk" name="tipe_produk" data={getUniqueData(dataTable,2,[namaProd])} callback={getValueSearch} type="select" selectDefault={{text:"ALL", value:"ALL"}}/>
+                <InputItem label="Durasi (hari)" name="durasi" data={getUniqueData(dataTable,4,[tipeProd, namaProd])} callback={getValueSearch} type="select" selectDefault={{text:"ALL", value:"ALL"}}/>
+                <InputItem label="Jumlah User" name="jumlah_user" data={getUniqueData(dataTable,3,[durasiProd, tipeProd])} callback={getValueSearch} type="select" selectDefault={{text:"ALL", value:"ALL"}}/>
+                <InputItem label="Billing" name="billing" data={getUniqueData(dataTable,5,[durasiProd, tipeProd,jumlahUser])} callback={getValueSearch} type="select" selectDefault={{text:"ALL", value:"ALL"}}/>
                 <Table data={filterJenisProduk} canEdit={false}/>
             </Layout>
             <Layout title="Input Produk Supplier">
