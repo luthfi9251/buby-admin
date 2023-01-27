@@ -8,7 +8,6 @@ export default async function handler(req, res) {
       try{
         const { jenis_produk,nama_produk,tipe_produk,uac,durasi_hari,billing } = req.body
         let id_produk = nama_produk.slice(0,3) + tipe_produk.slice(0,2) + durasi_hari.toString() + billing.slice(0,2) + uac.toString()
-        console.log(id_produk)
         const result = await mysqlQuery({
             query: "insert into jenis_produk(id_produk,jenis_produk, nama_produk, tipe_produk, user_per_account, durasi, billing) values(?,?,?,?,?,?,?)",
             values: [id_produk,jenis_produk,nama_produk,tipe_produk,uac,durasi_hari,billing]

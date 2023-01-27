@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     case "POST":
       try{
         const { id_produk,supplier,renew,harga } = req.body
-        let idProdukSupp = supplier.toString() + id_produk
+        let idProdukSupp = supplier.toString() + id_produk + renew.slice(0,1)
 
         const result = await mysqlQuery({
             query: "insert into produk_supplier values(?,?,?,?,?)",
